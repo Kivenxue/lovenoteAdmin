@@ -73,12 +73,18 @@
     .el-submenu__title {
       &:hover {
         background-color: $menuHover !important;
+        // color:$subMenuTextHover  !important;
       }
     }
-
+   .el-menu-item:hover{
+     color:#fff !important;
+   }
     .is-active>.el-submenu__title {
       color: $subMenuActiveText !important;
     }
+    // .el-menu-item:hover{
+    //   color:$subMenuTextHover
+    // }
 
     & .nest-menu .el-submenu>.el-submenu__title,
     & .el-submenu .el-menu-item {
