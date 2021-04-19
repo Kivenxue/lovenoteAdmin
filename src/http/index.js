@@ -36,7 +36,7 @@ http.interceptors.request.use(
         }
         // 请求头写入token
         if (getToken()) {
-            config.headers['Authorization'] = getToken()
+            config.headers['Authorization'] = `Bearer ${getToken()}`
         }
         return config
     },

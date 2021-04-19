@@ -11,6 +11,7 @@ export function login(data) {
         data
     })
 }
+
 // 退出登录
 export function logout(token) {
     return http({

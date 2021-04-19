@@ -1,3 +1,4 @@
+import router from '@/router'
 import Cookies from 'js-cookie'
 
 const TokenKey = 'ADMIN_SGIN_TOKEN'
@@ -25,4 +26,18 @@ export function setUserInfo(data) {
 
 export function removeUserInfo() {
   window.localStorage.removeItem(userInfoKey)
+}
+
+export function deToken() {
+  const token = getToken()
+  let { Base64 } = require('js-base64')
+  try {
+    let str = token.split('.')[1];
+    let user = JSON.parse(Base64.decode(str))
+    return user
+  } catch (error) {
+    removeToken()
+    router.push({ path: '/login' })
+    throw new Error('Token 无效')
+  }
 }

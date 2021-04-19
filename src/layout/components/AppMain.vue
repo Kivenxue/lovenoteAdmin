@@ -8,25 +8,29 @@
 
 <script>
 export default {
-  name: 'AppMain',
+  name: "AppMain",
   computed: {
     key() {
-      return this.$route.path
-    }
-  }
-}
+      return this.$route.path;
+    },
+  },
+};
 </script>
 
 <style scoped>
 .app-main {
   /*50 = navbar  */
+  background-color: #f0f2f5;
   min-height: calc(100vh - 50px);
   width: 100%;
   position: relative;
   overflow: hidden;
 }
-.fixed-header+.app-main {
-  padding-top: 50px;
+.fixed-header + .app-main {
+  padding-top: 65px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 </style>
 

@@ -1,5 +1,7 @@
 <template>
-  <div>权限列表</div>
+  <div>
+    
+  </div>
 </template>
 
 <script>

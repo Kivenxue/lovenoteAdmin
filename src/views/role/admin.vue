@@ -1,5 +1,5 @@
 <template>
-  <div>管理员列表</div>
+  <div></div>
 </template>
 
 <script>

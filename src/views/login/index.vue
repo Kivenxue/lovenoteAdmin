@@ -49,6 +49,17 @@
             />
           </span>
         </el-form-item>
+        <el-form-item prop="captchaCode" size="normal">
+          <div class="svgCode-container">
+            <el-input
+              placeholder="验证码"
+              maxlength="4"
+              v-model="loginForm.captchaCode"
+            ></el-input>
+            <span v-html="captchaCodeSvg" @click="renderCaptchaCode()"></span>
+          </div>
+        </el-form-item>
+
         <el-button
           :loading="loading"
           type="primary"
@@ -66,9 +77,11 @@
 
 <script>
 import VueParticles from "vue-particles/src/vue-particles/vue-particles";
-import { decrypt, encrypt } from "@/utils/crypto";
+// import { decrypt, encrypt } from "@/utils/crypto";
+import { getCaptchaCode } from "@/api/base";
 export default {
   name: "Login",
+
   components: { VueParticles },
   data() {
     const checkAccount = (rule, value, callback) => {
@@ -89,17 +102,23 @@ export default {
       loginForm: {
         account: "lemon123",
         password: "qq1879178791",
+        captchaCode: "",
       },
       loginRules: {
         account: [{ required: true, trigger: "blur", validator: checkAccount }],
         password: [
           { required: true, trigger: "blur", validator: checkPassword },
         ],
+        captchaCode: [
+          { required: true, message: "请输入验证码", trigger: "blur" },
+          { max: 4, min: 4, message: "请输入正确的密码", trigger: "blur" },
+        ],
       },
       saveData: false,
       loading: false,
       passwordType: "password",
       redirect: undefined,
+      captchaCodeSvg: null,
     };
   },
   watch: {
@@ -142,9 +161,15 @@ export default {
         }
       });
     },
+    renderCaptchaCode() {
+      getCaptchaCode().then((res) => {
+        this.captchaCodeSvg = res;
+      });
+    },
   },
   created() {
-    console.log();
+    console.log("start page...");
+    this.renderCaptchaCode();
   },
 };
 </script>
@@ -162,7 +187,21 @@ $cursor: #fff;
     color: $cursor;
   }
 }
-
+.svgCode-container {
+  height: 47px;
+  .el-input {
+    // width: 70% !important;
+    max-width: 40%;
+  }
+  span {
+    float: right;
+    height: 47px;
+    svg {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+}
 /* reset element-ui css */
 .login-container {
   .el-input {
