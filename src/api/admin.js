@@ -13,10 +13,10 @@ export function login(data) {
 }
 
 // 退出登录
-export function logout(token) {
+export function logout(id) {
     return http({
         url: '/logout',
-        methods: 'post',
-        data: token
+        method: 'post',
+        data: id
     })
 }

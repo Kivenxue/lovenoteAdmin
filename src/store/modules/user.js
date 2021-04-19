@@ -1,5 +1,5 @@
-import { login } from '@/api/admin'
-import { getToken, setToken, removeToken, getUserInfo, setUserInfo } from '@/utils/auth'
+import { login, logout } from '@/api/admin'
+import { getToken, setToken, removeToken, getUserInfo, setUserInfo, removeUserInfo } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
@@ -29,7 +29,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       login(loginForm).then(res => {
         try {
-          console.log(res.token);
           commit('SET_USERINFO', res.userInfo)
           commit('SET_TOKEN', res.token)
           setToken(res.token)
@@ -63,19 +62,21 @@ const actions = {
   //   })
   // },
 
-  // // user logout
-  // logout({ commit, state }) {
-  //   return new Promise((resolve, reject) => {
-  //     logout(state.token).then(() => {
-  //       removeToken() // must remove  token  first
-  //       resetRouter()
-  //       commit('RESET_STATE')
-  //       resolve()
-  //     }).catch(error => {
-  //       reject(error)
-  //     })
-  //   })
-  // },
+  // user logout
+  logout({ commit }, id) {
+    return new Promise((resolve, reject) => {
+      logout(id).then(() => {
+        removeToken()
+        removeUserInfo()
+        resetRouter()
+        commit('RESET_STATE')
+        resolve()
+      }).catch(error => {
+        console.log(error);
+        reject(error)
+      })
+    })
+  },
 
   // remove token
   resetToken({ commit }) {

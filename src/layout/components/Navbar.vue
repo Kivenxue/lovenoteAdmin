@@ -46,7 +46,9 @@ export default {
       this.$store.dispatch("app/toggleSideBar");
     },
     async logout() {
-      console.log(deToken());
+      const { data } = deToken();
+      await this.$store.dispatch("user/logout", data);
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
     },
   },
 };
