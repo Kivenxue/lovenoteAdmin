@@ -30,15 +30,9 @@ export default {
   padding-top: 65px;
   padding-bottom: 15px;
   padding-left: 15px;
-  padding-right: 15px;
 }
 </style>
 
 <style lang="scss">
 // fix css style bug in open el-dialog
-.el-popup-parent--hidden {
-  .fixed-header {
-    padding-right: 15px;
-  }
-}
 </style>

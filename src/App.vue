@@ -20,6 +20,18 @@ export default {
 .el-message {
   max-width: 95% !important;
 }
+.green {
+  color: #67c23a;
+}
+.grey {
+  color: #909399;
+}
+.red {
+  color: #f56c6c;
+}
+.blue {
+  color: #409eff;
+}
 .block-btn {
   display: block;
   width: 100%;

@@ -9,6 +9,7 @@
 
   .sidebar-container {
     transition: width 0.28s;
+    box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
     width: $sideBarWidth !important;
     background-color: $menuBg;
     height: 100%;
@@ -78,9 +79,15 @@
     }
    .el-menu-item:hover{
      color:#fff !important;
+     *:hover{
+       color: #fff !important;
+     }
    }
     .is-active>.el-submenu__title {
       color: $subMenuActiveText !important;
+    }
+    .is-active{
+      background-color: $menuHover !important;
     }
 
     // .el-menu-item:hover{

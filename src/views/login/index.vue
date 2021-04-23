@@ -175,9 +175,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
 $bg: #283443;
 $light_gray: #fff;
 $cursor: #fff;
@@ -190,8 +187,13 @@ $cursor: #fff;
 .svgCode-container {
   height: 47px;
   .el-input {
-    // width: 70% !important;
-    max-width: 40%;
+    // width: 50%;
+    max-width: 65%;
+  }
+  @media screen and (max-width: 540px) {
+    .el-input {
+      max-width: 40%;
+    }
   }
   span {
     float: right;
