@@ -78,7 +78,7 @@
 <script>
 import VueParticles from "vue-particles/src/vue-particles/vue-particles";
 // import { decrypt, encrypt } from "@/utils/crypto";
-import { getCaptchaCode } from "@/api/base";
+import { getCaptchaCode, checkCaptcha } from "@/api/base";
 export default {
   name: "Login",
 
@@ -103,6 +103,7 @@ export default {
         account: "lemon123",
         password: "qq1879178791",
         captchaCode: "",
+        captchaKey: "",
       },
       loginRules: {
         account: [{ required: true, trigger: "blur", validator: checkAccount }],
@@ -143,18 +144,24 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.loading = true;
-          this.$store
-            .dispatch("user/login", this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || "/" });
-              this.loading = false;
-            })
-            .catch((err) => {
-              console.log(err);
-              this.loading = false;
-            });
-          // this.loading = false;
+          checkCaptcha(
+            this.loginForm.captchaKey,
+            this.loginForm.captchaCode
+          ).then((res) => {
+            if (res) {
+              this.loading = true;
+              this.$store
+                .dispatch("user/login", this.loginForm)
+                .then(() => {
+                  this.$router.push({ path: this.redirect || "/" });
+                  this.loading = false;
+                })
+                .catch((err) => {
+                  console.log(err);
+                  this.loading = false;
+                });
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -163,7 +170,8 @@ export default {
     },
     renderCaptchaCode() {
       getCaptchaCode().then((res) => {
-        this.captchaCodeSvg = res;
+        this.captchaCodeSvg = res.data;
+        this.loginForm.captchaKey = res.key;
       });
     },
   },

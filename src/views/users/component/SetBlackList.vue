@@ -5,8 +5,8 @@
     :visible.sync="openDialog"
     :before-close="handleClose"
   >
-    <el-form :model="formData">
-      <el-form-item label="封禁理由">
+    <el-form :model="formData" :rules="rules" ref="banForm">
+      <el-form-item label="封禁理由" prop="reason">
         <el-select v-model="formData.reason" placeholder="请选择封禁理由">
           <el-option
             v-for="item in reason"
@@ -17,7 +17,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="封禁时长">
+      <el-form-item label="封禁时长" prop="endAt">
         <el-select v-model="formData.endAt" placeholder="请选择封禁时长">
           <el-option
             v-for="item in endAt"
@@ -28,6 +28,13 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="图片验证码" prop="captchaCode">
+        <div class="svgCode-container">
+          <el-input v-model="formData.captchaCode"></el-input>
+          <div class="captchaCode" v-html="captchaCode"></div>
+        </div>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" size="default" @click="handleBan"
           >封禁</el-button
@@ -40,6 +47,7 @@
 
 <script>
 import { endAt, reason } from "@/enum/blacklist";
+import { getCaptchaCode, checkCaptcha } from "@/api/base";
 export default {
   data() {
     return {
@@ -49,9 +57,19 @@ export default {
         uid: "",
         reason: "",
         endAt: "",
+        captchaCode: "",
+        captchaKey: "",
       },
       endAt,
       reason,
+      captchaCode: null,
+      rules: {
+        reason: [
+          { required: true, message: "请选择封禁理由", tigger: "change" },
+        ],
+        endAt: [{ required: true, message: "请选择封禁时长" }],
+        captchaCode: [{ required: true, message: "请输入图片验证码" }],
+      },
     };
   },
   props: {
@@ -70,6 +88,14 @@ export default {
         this.formData = val;
       },
     },
+    openDialog: {
+      immediate: true,
+      handler(val) {
+        if (val) {
+          this.renderCaptcha();
+        }
+      },
+    },
   },
   methods: {
     handleClose() {
@@ -77,7 +103,27 @@ export default {
       this.$emit("handleclose", false);
     },
     handleBan() {
-      this.$emit("handleban", this.formData);
+      this.$refs["banForm"].validate((valid) => {
+        if (valid) {
+          checkCaptcha(
+            this.formData.captchaKey,
+            this.formData.captchaCode
+          ).then((res) => {
+            if (res) {
+              this.$emit("handleban", this.formData);
+            }
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+    // 渲染图片验证码
+    async renderCaptcha() {
+      getCaptchaCode().then((res) => {
+        this.captchaCode = res.data;
+        this.formData.captchaKey = res.key;
+      });
     },
   },
   mounted() {
@@ -87,14 +133,37 @@ export default {
 };
 </script>
 
+<style lang="scss" scoped >
+.svgCode-container {
+  // height: 47px;
+  display: flex;
+  align-items: center;
+  .el-input {
+    // width: 50%;
+    max-width: 30% !important;
+  }
+  @media screen and (max-width: 540px) {
+    .el-input {
+      min-width: 40% !important;
+    }
+  }
+  .captchaCode {
+    float: right;
+    svg {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+}
+</style>
 <style lang="scss">
 .ban-dialog {
-  div:first-child {
-    max-width: 385px;
+  .el-dialog {
+    width: 385px;
   }
-  @media screen and (max-width: 635px) {
-    div:first-child {
-      min-width: 95% !important;
+  @media screen and (max-width: 390px) {
+    .el-dialog {
+      width: 95% !important;
     }
   }
 }

@@ -27,6 +27,15 @@ const routes = [
     ...CommentMenu,
     ...ActivityMenu,
     ...RolesMenu,
+    {
+        path: '/socket',
+        component: Layout,
+        children: [{
+            path: 'index',
+            component: () => import('@/views/socket'),
+            meta: { title: '聊天' }
+        }]
+    }
 ]
 
 export default routes

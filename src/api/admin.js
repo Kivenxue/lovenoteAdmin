@@ -2,11 +2,12 @@
  * 管理员接口
  */
 import http from '@/http'
+import { AdminAction } from './interface'
 
 // 管理员登录
 export function login(data) {
     return http({
-        url: '/login',
+        url: AdminAction.login,
         method: 'post',
         data
     })
@@ -15,7 +16,7 @@ export function login(data) {
 // 退出登录
 export function logout(id) {
     return http({
-        url: '/logout',
+        url: AdminAction.logout,
         method: 'post',
         data: id
     })
